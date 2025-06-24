@@ -1,19 +1,26 @@
 local inimigo = {}
 inimigo.__index = inimigo
 
-function inimigo:new(posicao, palavra, spd)
+function inimigo:new(rpx, rpy, palavra, spd)
     local self = setmetatable({}, inimigo)
-    self.posicao = posicao
+    self.rpx = rpx
+    self.rpy = rpy
     self.palavra = palavra
     self.spd = spd
     self.x = 20
     self.y = 20
+    self.dead = false
+    self.pLetra = 1 -- a primeira letra da palavra
+    self.letraCerta = self.palavra:sub(self.pLetra, self.pLetra) -- a letra que precisa ser pressionada
+    self.mLetra = self.palavra:sub(self.pLetra, self.pLetra) -- a letra que vai ser mostrada
+    self:position() -- <- corrigido aqui
     return self
 end
 
 
 function inimigo:draw()
-    love.graphics.print(self.palavra, self.x, self.y-20)
+    love.graphics.print(self.mLetra, self.x, self.y - 40)
+    love.graphics.print(self.palavra, self.x, self.y - 20)
     love.graphics.rectangle("fill", self.x, self.y, 10, 10)
 end
 
@@ -28,10 +35,49 @@ function inimigo:muve(dt)
     if dist > 1 then
         dx = dx / dist
         dy = dy / dist
-        self.x = self.x + dx * self.spd * dt -- velocidade = 100 pixels por segundo
+        self.x = self.x + dx * self.spd * dt
         self.y = self.y + dy * self.spd * dt
+    elseif dist <= 1 then
+        self.dead = true
     end
 end
 
+function inimigo:position()
+    if self.rpx == 1 then
+        self.x = 800
+    elseif self.rpx == -1 then
+        self.x = 0
+    elseif self.rpx == 0 then
+        self.x = 800 / 2
+    end
+
+    if self.rpy == 1 then
+        self.y = 600
+    elseif self.rpy == -1 then
+        self.y = 0
+    elseif self.rpy == 0 then
+        self.y = 600 / 2
+    end
+
+    if self.rpx == 0 and self.rpy == 0 then
+        self.rpx = math.random(-1, 1)
+        self.rpy = math.random(-1, 1)
+        self:position()
+    end
+end
+
+function inimigo:palavras(key)
+    self.letraCerta = self.palavra:sub(self.pLetra, self.pLetra)
+    if key == self.letraCerta then
+        self.pLetra = self.pLetra + 1
+        self.mLetra = self.palavra:sub(self.pLetra, self.pLetra)
+    elseif key ~= self.letraCerta then
+        self.pLetra = 1
+        self.mLetra = self.palavra:sub(self.pLetra, self.pLetra)
+    end
+    if self.pLetra > self.palavra:len() then
+        self.dead = true
+    end
+end
 
 return inimigo
