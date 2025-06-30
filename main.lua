@@ -1,10 +1,29 @@
 local Enemi = require("enemi")
+local Player = require("player")
 local inimigo = {}
-local palavras = {"ola", "mundo", "lua", "programacao", "e", "divertida", "como", "voce", "esta", "meu", "bem"}
+local palavras = {
+    "lua", "sol", "vida", "amor", "paz", "livro", "sorte", "forca", "verde",
+    "tempo", "nuvem", "luz", "brisa", "feliz", "chave", "ponto", "vento", "olhar",
+    "risos", "noite", "mundo", "verao", "chuva", "sonho", "carta", "folha",
+    "cores", "caminho", "mover", "rapido"
+}
+
+local dificeis = {
+    "inconstitucionalmente",
+    "anticonstitucionalismo",
+    "desproporcionalidade",
+    "desorganizacao",
+    "irresponsabilidade",
+    "extraordinariamente",
+    "compartimentalizacao",
+    "transcontinentalismo",
+    "interdisciplinaridade",
+    "incompatibilidade"
+}
 
 function love.load()
-    math.randomseed(os.time() + love.timer.getTime() * 1000)
-    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[4], math.random(10, 50)))
+    math.randomseed(os.time() + love.timer.getTime() * 1000) 
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
     math.randomseed(os.time() + love.timer.getTime() * 1000)
     table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
     math.randomseed(os.time() + love.timer.getTime() * 1000)
@@ -13,26 +32,65 @@ end
 
 function love.update(dt)
     for  _, o in ipairs(inimigo) do
+        verifPos()
         o:muve(dt)
         if o.dead then
             table.remove(inimigo, _)
         end
     end
     if #inimigo == 0 then
-        math.randomseed(os.time() + love.timer.getTime() * 1000)
-        table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
-        math.randomseed(os.time() + love.timer.getTime() * 1000)
-        table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
-        math.randomseed(os.time() + love.timer.getTime() * 1000)
-        table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
+        if Player.vida == 0 then
+            love.event.quit()
+        end
+        Player.vida = Player.vida + 1
+        if Player.vida > 3 then
+            Player.vida = 3
+        end
+        if Player.pontos >= -100000 and Player.pontos < 300  then
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
+        elseif Player.pontos >= 300 and Player.pontos < 500 then
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
+        elseif Player.pontos >= 500 and Player.pontos < 600 then
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 4))
+        elseif Player.pontos >= 600 then
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
+            math.randomseed(os.time() + love.timer.getTime() * 1000)
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), dificeis[math.random(#dificeis)], 4))
+        end
+
+        if Player.pontos > 1000 then
+            math.randomseed(os.time() + love.timer.getTime() * 1000) 
+            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#dificeis)]))
+        end
     end
 end
 
-local agora = ""
+
 
 function love.draw()
-    love.graphics.print("".. palavras[1], 20, 20)
-    love.graphics.print("".. agora, 20, 40)
+    Player:draw()
     for  _, o in ipairs(inimigo) do
         o:draw(dt)
     end
@@ -42,5 +100,17 @@ end
 function love.keypressed(key)
     for  _, o in ipairs(inimigo) do
         o:palavras(key)
+    end
+end
+
+function verifPos()
+    for i = 1, #inimigo do
+        for j = i + 1, #inimigo do
+            if inimigo[i].rpx == inimigo[j].rpx and inimigo[i].rpy == inimigo[j].rpy then
+                inimigo[j].rpx = math.random(-1, 1)
+                inimigo[j].rpy = math.random(-1, 1)
+                inimigo[j]:position()
+            end
+        end
     end
 end
