@@ -4,7 +4,6 @@ inimigo.__index = inimigo
 
 function inimigo:new(rpx, rpy, palavra, id)
     local self = setmetatable({}, inimigo)
-    self.t = 20
     self.id = id
     self.rpx = rpx
     self.dir = 0
@@ -43,6 +42,7 @@ end
 
 
 function inimigo:draw()
+    love.graphics.setFont(love.graphics.newFont("font/Tmilk.ttf",18))
     love.graphics.setColor(0, 0, 0)
     love.graphics.print(self.mLetra, self.x, self.y - self.imagNew:getHeight()-20)
     love.graphics.print(self.palavra, self.x, self.y - self.imagNew:getHeight())

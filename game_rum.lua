@@ -5,10 +5,10 @@ local Enemi = require("enemi")
 local Player = require("player")
 local inimigo = {}
 local palavras = {
-    "lua", "sol", "vida", "amor", "paz", "livro", "sorte", "forca", "verde",
+    "lua", "sol", "vida", "amor", "paz","ceu","ser","vil","mal","mae","ver","sob", "livro", "sorte", "forca", "verde",
     "tempo", "nuvem", "luz", "brisa", "feliz", "chave", "ponto", "vento", "olhar",
     "risos", "noite", "mundo", "verao", "chuva", "sonho", "carta", "folha",
-    "cores", "caminho", "mover", "rapido"
+    "cores", "caminho", "mover", "rapido","testicular","torcion"
 }
 
 local dificeis = {
@@ -26,7 +26,6 @@ local dificeis = {
 
 
 function stt.load()
-    
     math.randomseed(os.time() + love.timer.getTime() * 1000) 
     table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
     math.randomseed(os.time() + love.timer.getTime() * 1000)
@@ -42,16 +41,23 @@ function stt.update(dt)
     for  _, o in ipairs(inimigo) do
         stt.verifPos()
         o:muve(dt)
+        if Player.vida == 0 then
+            table.remove(inimigo, _)
+        end
         if o.dead then
             table.remove(inimigo, _)
         end
     end
+    if Player.vida == 0 then
+        menu.estado = "Menu"
+        menu.inGame = 0
+        Player:load()
+        stt.load()
+    end
+    if Player.pontos > Player.Mp then
+        Player.Mp = Player.pontos
+    end
     if #inimigo == 0 then
-        if Player.vida == 0 then
-            menu.estado = "Menu"
-            menu.inGame = 0
-            Player:load()
-        end
         Player.vida = Player.vida + 1
         if Player.vida > 3 then
             Player.vida = 3
@@ -95,6 +101,7 @@ function stt.update(dt)
             table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#dificeis)]))
         end
     end
+    
 end
 
 

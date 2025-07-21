@@ -13,6 +13,10 @@ local player = {
     blink_duration = 0.2, -- segundos piscando (200ms)
     mx = 0,
     my = 0,
+    Mp = 0,
+
+    balanco = 0,
+    std = false
 }
 
 function player:load()
@@ -21,6 +25,8 @@ function player:load()
 end
 
 function player:update(dt)
+    self.balanco = math.sin(love.timer.getTime() * 5) * 0.2
+
     self.mx = love.mouse.getX()
     self.my = love.mouse.getY()
     if self.vd > self.vida then
@@ -46,20 +52,62 @@ function player:draw()
     love.graphics.draw(self.img, self.px-self.tx/2, self.py-self.ty/2, 0, 1, 1, self.tx/2, self.ty/2)
     love.graphics.setColor(1, 1, 1) -- normal
     
-    love.graphics.printf(self.pontos, 0, 0, love.graphics.getWidth(), "center")
+    
     if menu.estado == "Jogo" then
+        
+        love.graphics.printf(self.pontos, 0, 0, love.graphics.getWidth(), "center")
         love.graphics.rectangle("fill", love.graphics.getWidth()-50, 10, 25, 25)
+    elseif menu.estado == "Menu" then
+        if menu.inGame == 0 then
+            love.graphics.setColor(1, 0, 0)
+            local font = love.graphics.getFont()
+            local largura = font:getWidth(self.Mp)
+            local altura = font:getHeight()
+
+            local x = love.graphics.getWidth() / 2
+            local y = 11 -- ou 0, se preferir
+
+            love.graphics.push()
+            love.graphics.translate(x, y)       -- move para o centro do texto
+            love.graphics.rotate(self.balanco)  -- gira
+            love.graphics.print(self.Mp, -largura/2, -altura/2) -- desenha centralizado
+            love.graphics.pop()
+
+            love.graphics.setColor(1, 1, 1) 
+        elseif menu.inGame == 1 then
+            love.graphics.setColor(1, 0, 0)
+            local font = love.graphics.getFont()
+            local largura = font:getWidth(self.Mp)
+            local altura = font:getHeight()
+
+            local x = love.graphics.getWidth() / 2
+            local y = 30 -- ou 0, se preferir
+
+            love.graphics.push()
+            love.graphics.translate(x, y)       -- move para o centro do texto
+            love.graphics.rotate(self.balanco)  -- gira
+            love.graphics.print(self.Mp, -largura/2, -altura/2) -- desenha centralizado
+            love.graphics.pop()
+
+
+            love.graphics.setColor(1, 1, 1) 
+            love.graphics.printf(self.pontos, 0, 0, love.graphics.getWidth(), "center")
+        end
     end
-    if self.vida == 3 then
-        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
-        love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
-        love.graphics.draw(self.imgC, 75,10,0,0.75,0.75)
-    elseif self.vida == 2 then
-        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
-        love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
-    elseif self.vida == 1 then
-        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+    if menu.inGame == 1 then
+        
+        if self.vida == 3 then
+            love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+            love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
+            love.graphics.draw(self.imgC, 75,10,0,0.75,0.75)
+        elseif self.vida == 2 then
+            love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+            love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
+        elseif self.vida == 1 then
+            love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+        end
     end
+    
     
 end
 

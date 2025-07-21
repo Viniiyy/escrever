@@ -1,6 +1,6 @@
 
 local menu = {
-    JgarImg = love.graphics.newImage("Sprites/Jogar_Btn_spr.png"),
+    JgarImg = love.graphics.newImage("Sprites/Btn_spr.png"),
     objX = 150,
     objY = 150,
     objJMX = 0,
@@ -13,11 +13,12 @@ local menu = {
     estado = "Menu",
 
 
-    ConfImg = love.graphics.newImage("Sprites/Conf_Btn_spr.png"),
+    ConfImg = love.graphics.newImage("Sprites/Btn_spr.png"),
     CobjX = 150,
     CobjY = 300,
     CobjJMX = 0,
     CobjJMY = 0,
+    
 }
 function menu:load()
     self.objJMX = self.JgarImg:getWidth()
@@ -25,9 +26,11 @@ function menu:load()
 end
 
 function menu:update()
+    
     self.my = love.mouse.getY()
     self.mx = love.mouse.getX()
     if self.estado == "Menu" then
+
         if menu:mCon(self.objX, self.objY, self.objJMX, self.objJMY, self.mx, self.my) and love.mouse.isDown(1) then
             self.inGame = 1
             self.estado = "Jogo"
@@ -42,9 +45,12 @@ end
 function menu:draw()
     
     if self.estado == "Menu" then
-        love.graphics.rectangle("fill",125, 125, 150+25+25, 150+25+50+25)
+        love.graphics.rectangle("fill",125, 125, 200, 250)
+        
         love.graphics.draw(self.JgarImg, self.objX, self.objY)
+        love.graphics.print("Jogar", self.objX+45, self.objY+12)
         love.graphics.draw(self.ConfImg, self.CobjX, self.CobjY)
+        love.graphics.print("Config", self.CobjX+45, self.CobjY+12)
     elseif self.estado == "Config" then
 
     end
