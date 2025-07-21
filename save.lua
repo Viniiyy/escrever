@@ -1,0 +1,2 @@
+local ler
+local escrever 

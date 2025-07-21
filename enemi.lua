@@ -4,8 +4,10 @@ inimigo.__index = inimigo
 
 function inimigo:new(rpx, rpy, palavra, id)
     local self = setmetatable({}, inimigo)
+    self.t = 20
     self.id = id
     self.rpx = rpx
+    self.dir = 0
     self.rpy = rpy
     self.palavra = palavra
     self.spd = 100
@@ -19,17 +21,48 @@ function inimigo:new(rpx, rpy, palavra, id)
     self.mLetra = self.palavra:sub(self.pLetra, self.pLetra) -- a letra que vai ser mostrada
     self:balanceamento()
     self:position() -- <- corrigido aqui
+    self.balanco = 0
+    self.std = false
+    self.Esq = love.graphics.newImage("Sprites/Esqueleto_spr.png")
+    self.Olho = love.graphics.newImage("Sprites/Olho_spr.png")
+    self.imagNew = 0
+    if self.palavra:len() >= 1 and self.palavra:len() <= 3 then
+        self.imagNew = self.Olho
+    elseif self.palavra:len() >= 4 then
+        self.imagNew = self.Esq
+    else
+        -- valor padrão caso não entre em nenhuma das condições
+        self.imagNew = self.Olho -- ou crie um sprite padrão
+    end
+
     return self
 end
 
 
+
+
+
 function inimigo:draw()
-    love.graphics.print(self.mLetra, self.x, self.y - 40)
-    love.graphics.print(self.palavra, self.x, self.y - 20)
-    love.graphics.rectangle("fill", self.x-5, self.y-5, 10, 10)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print(self.mLetra, self.x, self.y - self.imagNew:getHeight()-20)
+    love.graphics.print(self.palavra, self.x, self.y - self.imagNew:getHeight())
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(self.imagNew, self.x, self.y, self.balanco, self.dir, 1, self.imagNew:getWidth()/2, self.imagNew:getHeight()/2)
+    --love.graphics.rectangle("fill", self.x-self.t/2, self.y-self.t/2, self.t, self.t)
 end
 
 function inimigo:muve(dt)
+    if self.std == false then
+        self.balanco = math.sin(love.timer.getTime() * 5) * 0.2
+        if self.balanco > 0.25 then -- ângulo em radianos (mais suave)
+            self.std = true
+        end
+    else
+        self.balanco = math.sin(love.timer.getTime() * 5) * 0.2
+        if self.balanco < -0.25 then
+            self.std = false
+        end
+    end
     local targetX = love.graphics.getWidth() / 2
     local targetY = love.graphics.getHeight() / 2
 
@@ -52,6 +85,7 @@ function inimigo:muve(dt)
         elseif self.palavra:len() > 5 and self.palavra:len() <= 7 then
             player.pontos = player.pontos - 35
         elseif self.palavra:len() > 7 then
+            player.vida = player.vida - 1
             player.pontos = player.pontos - 40
         end
         player.vida = player.vida - 1
@@ -61,10 +95,18 @@ end
 
 function inimigo:position()
     if self.rpx == -1 then
+        self.dir = self.rpx
         self.x = 0
     elseif self.rpx == 0 then
+        local d = math.random(0, 1)
+        if d == 0 then
+            self.dir = -1
+        else
+            self.dir = 1
+        end
         self.x = love.graphics.getWidth() / 2
     elseif self.rpx == 1 then
+        self.dir = self.rpx
         self.x = love.graphics.getWidth()
     end
 

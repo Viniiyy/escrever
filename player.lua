@@ -1,27 +1,70 @@
+local menu = require("Menu")
 local player = {
     vida = 3,
     px = love.graphics.getWidth() / 2 -20/2,
     py = love.graphics.getHeight() / 2 -20/2,
     tx = 20,
     ty = 20,
-
-    pontos = 0
+    imgC = love.graphics.newImage("Sprites/Coracao_spr.png"),
+    img = love.graphics.newImage("Sprites/Mago_spr.png"),
+    pontos = 0,
+    vd = 3,
+    blink_timer = 0,   -- tempo restante piscando
+    blink_duration = 0.2, -- segundos piscando (200ms)
+    mx = 0,
+    my = 0,
 }
 
-function player:draw()
-    if self.vida == 3 then
-        love.graphics.rectangle("fill", 0, 5, 5, 5)
-        love.graphics.rectangle("fill", 10, 5, 5, 5)
-        love.graphics.rectangle("fill", 20, 5, 5, 5)
-    elseif self.vida == 2 then
-        love.graphics.rectangle("fill", 0, 5, 5, 5)
-        love.graphics.rectangle("fill", 10, 5, 5, 5)
-    elseif self.vida == 1 then
-        love.graphics.rectangle("fill", 0, 5, 5, 5)
-    end
-    love.graphics.printf(self.pontos, 0, 0, love.graphics.getWidth(), "center")
-    love.graphics.rectangle("fill", self.px, self.py, self.tx, self.ty)
+function player:load()
+    self.vida = 3
+    self.pontos = 0
 end
 
+function player:update(dt)
+    self.mx = love.mouse.getX()
+    self.my = love.mouse.getY()
+    if self.vd > self.vida then
+        self.blink_timer = self.blink_duration
+        self.vd = self.vida
+    end
+
+    if self.blink_timer > 0 then
+        self.blink_timer = self.blink_timer - dt
+    end
+    if player:mCon(love.graphics.getWidth() - 50, 10, 25, 25, self.mx, self.my) and love.mouse.isDown(1) then
+        menu.inGame = 1
+        menu.estado = "Menu"
+    end
+end
+
+function player:draw()
+    if self.blink_timer > 0 then
+        love.graphics.setColor(1, 0, 0) -- vermelho
+    else
+        love.graphics.setColor(1, 1, 1) -- normal
+    end
+    love.graphics.draw(self.img, self.px-self.tx/2, self.py-self.ty/2, 0, 1, 1, self.tx/2, self.ty/2)
+    love.graphics.setColor(1, 1, 1) -- normal
+    
+    love.graphics.printf(self.pontos, 0, 0, love.graphics.getWidth(), "center")
+    if menu.estado == "Jogo" then
+        love.graphics.rectangle("fill", love.graphics.getWidth()-50, 10, 25, 25)
+    end
+    if self.vida == 3 then
+        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+        love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
+        love.graphics.draw(self.imgC, 75,10,0,0.75,0.75)
+    elseif self.vida == 2 then
+        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+        love.graphics.draw(self.imgC, 50,10,0,0.75,0.75)
+    elseif self.vida == 1 then
+        love.graphics.draw(self.imgC, 25,10,0,0.75,0.75)
+    end
+    
+end
+
+function player:mCon(objx,objy, objTx, objty, mx, my)
+    return mx > objx and mx < objx + objTx and my > objy and my < objy + objty
+end
 
 return player
