@@ -19,7 +19,6 @@ function love.load()
     screenHeight = love.graphics.getHeight()
 
     if est.estado == "Menu" then
-        
         est:load()
     elseif est.estado == "Jogo" then
         gStt.load()
@@ -35,6 +34,8 @@ function love.update(dt)
         est:update()
     elseif est.estado == "Jogo" then
         gStt.update(dt)
+    elseif est.estado == "Config" then
+        est:update()
     end
     
 end
@@ -52,6 +53,12 @@ function love.draw(dt)
         gStt.draw(dt)
         est:draw()
     elseif est.estado == "Config" then
+        for y = 0, screenHeight, tileHeight do
+            for x = 0, screenWidth, tileWidth do
+                love.graphics.draw(tile, x, y)
+            end
+        end
+        gStt.draw(dt)
         est:draw()
     elseif est.estado == "Jogo" then
         for y = 0, screenHeight, tileHeight do

@@ -8,30 +8,32 @@ local palavras = {
     "lua", "sol", "vida", "amor", "paz","ceu","ser","vil","mal","mae","ver","sob", "livro", "sorte", "forca", "verde",
     "tempo", "nuvem", "luz", "brisa", "feliz", "chave", "ponto", "vento", "olhar",
     "risos", "noite", "mundo", "verao", "chuva", "sonho", "carta", "folha",
-    "cores", "caminho", "mover", "rapido","testicular","torcion"
+    "cores", "caminho", "mover", "rapido"
 }
 
 local dificeis = {
-    "inconstitucionalmente",
-    "anticonstitucionalismo",
-    "desproporcionalidade",
-    "desorganizacao",
-    "irresponsabilidade",
-    "extraordinariamente",
-    "compartimentalizacao",
-    "transcontinentalismo",
-    "interdisciplinaridade",
-    "incompatibilidade"
+    "responsável",
+    "universidade",
+    "oportunidade",
+    "planejamento",
+    "desenvolvido",
+    "administrador",
+    "questionamento",
+    "comunicadores",
+    "relacionamento",
+    "transformador"
 }
+
+
 
 
 function stt.load()
     math.randomseed(os.time() + love.timer.getTime() * 1000) 
-    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)]))
     math.randomseed(os.time() + love.timer.getTime() * 1000)
-    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)]))
     math.randomseed(os.time() + love.timer.getTime() * 1000)
-    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], math.random(10, 50)))
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)]))
     Player:load()
 end
 
@@ -62,39 +64,7 @@ function stt.update(dt)
         if Player.vida > 3 then
             Player.vida = 3
         end
-        if Player.pontos >= -100000 and Player.pontos < 300  then
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
-        elseif Player.pontos >= 300 and Player.pontos < 500 then
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
-        elseif Player.pontos >= 500 and Player.pontos < 600 then
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 4))
-        elseif Player.pontos >= 600 then
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
-            math.randomseed(os.time() + love.timer.getTime() * 1000)
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
-            math.randomseed(os.time() + love.timer.getTime() * 1000) 
-            table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), dificeis[math.random(#dificeis)], 4))
-        end
+        stt.spanw()
 
         if Player.pontos > 1000 then
             math.randomseed(os.time() + love.timer.getTime() * 1000) 
@@ -134,5 +104,32 @@ function stt.keys(key)
     end
 end
 
+function stt.spanw()
+    local numD = 0
+    if menu.Dificuldade == 1 then
+        numD = 700
+    elseif menu.Dificuldade == 2 then
+        numD = 500
+    elseif menu.Dificuldade == 3 then
+        numD = 300
+    end
+    local pontos = Player.pontos/numD
+    local inte = math.floor(pontos)
+    for i = 1, inte do
+        table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)]))
+    end
+    math.randomseed(os.time() + love.timer.getTime() * 1000) 
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 1))
+    math.randomseed(os.time() + love.timer.getTime() * 1000)
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 2))
+    math.randomseed(os.time() + love.timer.getTime() * 1000)
+    table.insert(inimigo, Enemi:new(math.random(-1, 1), math.random(-1, 1), palavras[math.random(#palavras)], 3))
+end
+
 
 return stt
+
+
+
+
+

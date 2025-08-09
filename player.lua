@@ -7,7 +7,7 @@ local player = {
     ty = 20,
     imgC = love.graphics.newImage("Sprites/Coracao_spr.png"),
     img = love.graphics.newImage("Sprites/Mago_spr.png"),
-    pontos = 0,
+    pontos = 700,
     vd = 3,
     blink_timer = 0,   -- tempo restante piscando
     blink_duration = 0.2, -- segundos piscando (200ms)
@@ -21,7 +21,7 @@ local player = {
 
 function player:load()
     self.vida = 3
-    self.pontos = 0
+    self.pontos = 700
 end
 
 function player:update(dt)
