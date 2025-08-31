@@ -23,9 +23,6 @@ function love.load()
     elseif est.estado == "Jogo" then
         gStt.load()
     end
-
-    
-    
 end
 
 function love.update(dt)

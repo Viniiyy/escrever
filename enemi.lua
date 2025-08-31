@@ -8,8 +8,8 @@ function inimigo:new(rpx, rpy, palavra)
     self.dir = 0
     self.rpy = rpy
     self.palavra = palavra
-    self.spd = 100
-    self.Fspd = 7
+    self.spd = 60
+    self.Fspd = 5
     self.x = 20
     self.y = 20
     self.Dpontos = 0
